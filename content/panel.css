@@ -1,0 +1,152 @@
+﻿/* ===========================================================
+   狒狒助手 - 浮动面板样式
+   =========================================================== */
+
+#_helperPanel {
+  position: fixed;
+  z-index: 2147483647;
+  width: 300px !important;
+  font: 13px/1.5 -apple-system, BlinkMacSystemFont, sans-serif;
+  color: #1a1a1a;
+  background: rgba(255,255,255,0.97);
+  border-radius: 12px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.2);
+  overflow: hidden;
+  user-select: none;
+}
+#_helperPanel.minimized { width: auto !important; }
+
+._hpHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 14px;
+  cursor: move;
+  background: linear-gradient(135deg,#4a6cf7,#6c5ce7);
+  color: #fff;
+  border-radius: 12px 12px 0 0;
+}
+._hpBody { padding: 8px 12px 10px; }
+._hpBody.hidden { display: none; }
+
+._hpCard {
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 8px 12px;
+  margin-bottom: 5px;
+}
+._hpCard + ._hpCard { margin-top: 5px; }
+
+._hpRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 26px;
+}
+._hpRow + ._hpRow { margin-top: 4px; padding-top: 4px; border-top: 1px solid #eee; }
+
+._hpDot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: #aaa;
+  display: inline-block;
+  flex-shrink: 0;
+  transition: .3s;
+}
+
+/* Toggle */
+._hpSwitch {
+  position: relative;
+  display: inline-block;
+  width: 36px; height: 20px;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+._hpSwitch input { opacity: 0; width: 0; height: 0; }
+._hpSwitch ._hpTrack {
+  position: absolute; inset: 0;
+  border-radius: 20px;
+  background: #ccc;
+  transition: .25s;
+}
+._hpSwitch ._hpThumb {
+  position: absolute;
+  height: 14px; width: 14px;
+  left: 3px; bottom: 3px;
+  background: #fff;
+  border-radius: 50%;
+  transition: .25s;
+}
+._hpSwitch input:checked + ._hpTrack { background: #4a6cf7; }
+._hpSwitch input:checked ~ ._hpThumb { left: 19px; }
+
+/* Speed */
+._hpSpeedGroup { display: flex; gap: 4px; flex: 1; max-width: 130px; }
+._hpSpeedBtn {
+  padding: 2px 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 11px;
+  cursor: pointer;
+  background: #f5f5f5;
+  color: #555;
+  flex: 1;
+  text-align: center;
+}
+._hpSpeedBtn.active { background: #4a6cf7; color: #fff; border-color: #4a6cf7; }
+
+/* API */
+._hpApiRow { font-size: 11px; cursor: pointer; padding: 3px 0; display: flex; align-items: center; gap: 4px; }
+._hpApiDrawer { display: none; margin-top: 5px; padding-top: 5px; border-top: 1px solid #eee; }
+._hpApiInput {
+  width: 100%;
+  padding: 5px 8px;
+  border: 1.5px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 11px;
+  outline: none;
+  font-family: monospace;
+}
+._hpApiInput:focus { border-color: #4a6cf7; }
+._hpApiActions { display: flex; gap: 4px; margin-top: 4px; }
+._hpApiBtn {
+  padding: 3px 8px;
+  border: none;
+  border-radius: 4px;
+  font-size: 10px;
+  cursor: pointer;
+  color: #fff;
+}
+._hpApiBtn.save { background: #4a6cf7; }
+._hpApiBtn.test { background: #6b7280; }
+._hpApiBtn.del { background: #ef4444; }
+
+._hpBtn {
+  display: block;
+  width: 100%;
+  padding: 6px 0;
+  margin-top: 4px;
+  border: none;
+  border-radius: 6px;
+  font-size: 11px;
+  cursor: pointer;
+  font-weight: 500;
+  text-align: center;
+  background: #4a6cf7;
+  color: #fff;
+}
+._hpBtn:hover { background: #3a5ce5; }
+
+#_hpNotify {
+  position: fixed; top: 20px; left: 50%;
+  transform: translateX(-50%);
+  z-index: 999999;
+  color: #fff;
+  padding: 10px 24px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  max-width: 80vw;
+  text-align: center;
+}
