@@ -1,9 +1,9 @@
-﻿// 浮动面板（完整版——与 popup UI 一致）
+﻿
 (function() {
   "use strict";
   if (window.top !== window.self || document.getElementById("_helperPanel")) return;
 
-  // ─── 注入 CSS ───
+  
   var link = document.createElement("link");
   link.rel = "stylesheet";
   link.href = chrome.runtime.getURL("panel.css");
@@ -22,7 +22,7 @@
   p.className = isMin ? "minimized" : "";
   p.style.cssText = posStyle;
 
-  // ═══ Header ═══
+  
   var h = document.createElement("div");
   h.className = "_hpHeader";
   h.innerHTML = '<span style="display:flex;align-items:center;gap:5px;font-weight:600;font-size:13px"><span class="_hpDot" id="_hpPanelDot"></span> \u72D2\u72D2\u52A9\u624B</span>' +
@@ -31,11 +31,11 @@
     '<span id="_hpCloseBtn" style="cursor:pointer;opacity:.7;font-size:14px;line-height:1;padding:0 2px">\u2715</span></span>';
   p.appendChild(h);
 
-  // ═══ Body ═══
+  
   var b = document.createElement("div");
   b.className = "_hpBody" + (isMin ? " hidden" : "");
 
-  // Card 1: 状态 + 开关
+  
   b.innerHTML =
     '<div class="_hpCard">' +
       '<div class="_hpRow">' +
@@ -46,7 +46,7 @@
         '<label class="_hpSwitch"><input id="_hpToggle" type="checkbox"><span class="_hpTrack"></span><span class="_hpThumb"></span></label>' +
       '</div>' +
     '</div>' +
-    // Card 2: 倍速 + 统计
+    
     '<div class="_hpCard">' +
       '<div class="_hpRow"><span style="font-size:12px">\u23E9 \u500D\u901F</span><div class="_hpSpeedGroup" id="_hpSpeedGroup">' +
         '<button class="_hpSpeedBtn active" data-speed="1">1x</button>' +
@@ -55,7 +55,7 @@
       '</div></div>' +
       '<div class="_hpRow"><span style="font-size:11px;color:#888">\uD83D\uDCCA \u4ECA\u65E5\u8FDB\u5EA6</span><span id="_hpProgress" style="font-size:11px;color:#888">\u52A0\u8F7D\u4E2D...</span></div>' +
     '</div>' +
-    // Card 3: API Key
+    
     '<div class="_hpCard">' +
       '<div class="_hpApiRow" id="_hpApiRow"><span>\uD83D\uDD11</span><span id="_hpApiStatus">\u68C0\u6D4B\u4E2D...</span><span style="flex:1"></span><span style="font-size:10px;color:#999">\u25BC</span></div>' +
       '<div class="_hpApiDrawer" id="_hpApiDrawer">' +
@@ -71,7 +71,7 @@
   p.appendChild(b);
   document.body.appendChild(p);
 
-  // ═══ Drag ═══
+  
   var dragging = false, offX = 0, offY = 0;
   h.addEventListener("mousedown", function(e) {
     if (e.target.id === "_hpMinBtn" || e.target.id === "_hpCloseBtn") return;
@@ -95,7 +95,7 @@
     savePos(r.left, r.top);
   });
 
-  // ═══ Minimize / Close ═══
+  
   document.getElementById("_hpMinBtn").onclick = function() {
     isMin = !isMin;
     b.classList.toggle("hidden", isMin);
@@ -105,7 +105,7 @@
   };
   document.getElementById("_hpCloseBtn").onclick = function() { p.style.display = "none"; };
 
-  // ═══ DOM refs ═══
+  
   var sd = document.getElementById("_hpStatusDot");
   var st = document.getElementById("_hpStatusText");
   var tog = document.getElementById("_hpToggle");
@@ -122,7 +122,7 @@
   var dCol = { idle:"#aaa", video_playing:"#22c55e", video_ended:"#f59e0b", answering_quiz:"#8b5cf6", advancing:"#3b82f6", error:"#ef4444", quiz_done:"#f59e0b" };
   var dLbl = { idle:"\u5C31\u7EEA", video_playing:"\u64AD\u653E\u89C6\u9891\u4E2D", video_ended:"\u7B49\u5F85\u4EFB\u52A1\u5B8C\u6210", answering_quiz:"\u81EA\u52A8\u7B54\u9898\u4E2D", advancing:"\u8DF3\u8F6C\u4E0B\u4E00\u8282", error:"\u51FA\u9519", quiz_done:"\u7B54\u9898\u5B8C\u6210" };
 
-  // ═══ Status hook ═══
+  
   var _orig = setState;
   setState = function(state, msg) {
     var c = dCol[state] || "#aaa";
@@ -133,14 +133,14 @@
   };
   setState(currentState, stateMessage);
 
-  // ═══ Toggle ═══
+  
   chrome.storage.sync.get("autoPlayEnabled", function(d) { tog.checked = d.autoPlayEnabled !== false; });
   tog.addEventListener("change", function() {
     chrome.storage.sync.set({ autoPlayEnabled: tog.checked });
     chrome.runtime.sendMessage({ action: "toggle-auto", enabled: tog.checked }).catch(function(){});
   });
 
-  // ═══ Speed ═══
+  
   chrome.storage.local.get("_hpSpeed", function(d) {
     var spd = d._hpSpeed || 1;
     var btns = sgrp.querySelectorAll("._hpSpeedBtn");
@@ -159,7 +159,7 @@
     for (var vi = 0; vi < vids.length; vi++) vids[vi].playbackRate = spd;
   });
 
-  // ═══ Stats refresh ═══
+  
   function refreshStats() {
     try {
       var today = new Date().toISOString().slice(0, 10);
@@ -170,7 +170,7 @@
   refreshStats();
   setInterval(refreshStats, 5000);
 
-  // ═══ API Key ═══
+  
   var drawerOpen = false;
   apiRow.addEventListener("click", function(e) {
     if (e.target.tagName === "INPUT" || e.target.tagName === "BUTTON") return;

@@ -1,5 +1,5 @@
-﻿// ==== 狒狒助手 background service worker ====
-// ==== XOR 加解密（Key 仅在 background 中使用，content script 不可见）====
+﻿
+
 function encryptKey(key) {
   var k = "fFHelper2024"; var r = "";
   for (var i = 0; i < key.length; i++) r += String.fromCharCode(key.charCodeAt(i) ^ k.charCodeAt(i % k.length));
@@ -22,7 +22,7 @@ async function getApiKey() {
   });
 }
 
-// ==== 右键菜单 ====
+
 chrome.runtime.onInstalled.addListener(() => {
   chrome.contextMenus.create({ id: "ai-search", title: "AI搜题", contexts: ["selection"] });
 });
@@ -32,7 +32,7 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
   }
 });
 
-// ==== DeepSeek API 调用 ====
+
 async function askDeepSeek(questionText) {
   const apiKey = await getApiKey();
   if (!apiKey) throw new Error("未设置 DeepSeek API Key");
@@ -69,7 +69,7 @@ async function answerQuiz(questionsText, questionCount) {
   } finally { clearTimeout(timeoutId); }
 }
 
-// ==== 消息路由 ====
+
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.action === "ask-ai") {
     askDeepSeek(message.text).then(answer => { sendResponse({ success: true, answer }); }).catch(err => { sendResponse({ success: false, error: err.message }); });
@@ -86,7 +86,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     return true;
   }
   if (message.action === "keepalive") { sendResponse({ alive: true }); return true; }
-  // ─── 设置页面消息 ───
+  
   if (message.action === "check-api-key") {
     getApiKey().then(key => { sendResponse({ hasKey: !!key }); });
     return true;

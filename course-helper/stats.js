@@ -1,10 +1,9 @@
-﻿/**
- * @file 学习统计与日志模块
- * 包含日统计、带容量保护的日志系统、API Key 加解密。
- * 无外部依赖。
- */
+﻿
 
-// ─── 学习统计 ───
+
+
+
+
 function getDailyStats() {
   var today = new Date().toISOString().slice(0, 10);
   try {
@@ -18,7 +17,7 @@ function saveDailyStats(stats) {
   localStorage.setItem('_hpStats_' + new Date().toISOString().slice(0, 10), JSON.stringify(stats));
 }
 
-// ─── 学习日志（带容量保护）───
+
 var MAX_LOG_ENTRIES = 200;
 var MAX_LOG_BYTES = 50 * 1024;
 
@@ -39,7 +38,7 @@ function addLog(entry) {
   }
 }
 
-// ─── API Key 加解密 ───
+
 function encryptKey(key) {
   var k = 'fFHelper2024';
   var r = '';

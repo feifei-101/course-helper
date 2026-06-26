@@ -1,18 +1,16 @@
-/**
- * @file 视频处理模块
- * 负责视频查找、播放、结束检测、倒带信号。
- * 依赖：CHAOXING_SELECTORS（selectors.js）、setState（state.js）
- */
 
-/** @type {number} 视频轮询重试计数 */
+
+
+
+
+
 var retryCount = 0;
-/** @type {number} 上次通知时间戳 */
+
 var lastNotified = 0;
 
-/**
- * 在页面中查找可播放的视频
- * @returns {boolean} 是否找到并触发了播放
- */
+
+
+
 var _hpVideoFound = false;
 function findAndPlayVideo() {
   var v = document.querySelector(CHAOXING_SELECTORS.videoEl);
@@ -20,10 +18,9 @@ function findAndPlayVideo() {
   return false;
 }
 
-/**
- * 尝试播放视频
- * @param {HTMLVideoElement} v - 视频元素
- */
+
+
+
 function tryPlay(v) {
   if (!v) return;
   if (!v.paused && !v.ended) { setState('video_playing', '\u64AD\u653E\u89C6\u9891\u4E2D'); bindVideoEnd(v); return; }
@@ -43,10 +40,9 @@ function tryPlay(v) {
   });
 }
 
-/**
- * 绑定视频播放结束事件
- * @param {HTMLVideoElement} v - 视频元素
- */
+
+
+
 function bindVideoEnd(v) {
   if (v.dataset.helperBound === 'true') return;
   v.dataset.helperBound = 'true';
@@ -60,7 +56,7 @@ function bindVideoEnd(v) {
   }, 2000);
 }
 
-/** 通知视频已结束（去重防抖） */
+
 function notifyVideoEnded() {
   var now = Date.now();
   if (now - lastNotified < 5000) return;
@@ -68,7 +64,7 @@ function notifyVideoEnded() {
   chrome.storage.local.set({ _helperVideoEnded: now });
 }
 
-/** 检查倒带信号并执行快进 */
+
 function checkRewindSignal() {
   chrome.storage.local.get(['_helperRewind'], function(data) {
     if (data._helperRewind && Date.now() - data._helperRewind < 4000) {
@@ -87,7 +83,7 @@ function checkRewindSignal() {
   });
 }
 
-// 全局轮询倒带信号
+
 setInterval(checkRewindSignal, 2000);
 
 

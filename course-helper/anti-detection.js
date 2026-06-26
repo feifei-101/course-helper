@@ -1,17 +1,11 @@
 ﻿console.log('>>>ANTI-DETECTION-MODULE<<<');
-/**
- * @file 反检测工具模块
- * 包含正态分布延迟、贝塞尔曲线鼠标点击、模拟浏览行为、答题频率限制、自适应轮询。
- * 无外部依赖，仅依赖 window / document / chrome API。
- */
 
-// ─── Box-Muller 正态分布 ───
-/**
- * 生成正态分布随机数
- * @param {number} mean - 均值
- * @param {number} std - 标准差
- * @returns {number} 正态分布随机值
- */
+
+
+
+
+
+
 function randn(mean, std) {
   var u = 0, v = 0;
   while (u === 0) u = Math.random();
@@ -19,22 +13,15 @@ function randn(mean, std) {
   return mean + std * Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
 }
 
-// ─── 人类行为延迟模型 ───
-/**
- * @typedef {Object} DelayConfig
- * @property {number} mean
- * @property {number} std
- * @property {number} min
- * @property {number} max
- */
 
-/**
- * 按行为类型生成拟人延迟（Promise 风格）
- * @param {string} type - 行为类型
- * @returns {Promise<void>}
- */
+
+
+
+
+
+
 function humanDelay(type) {
-  /** @type {Object<string, DelayConfig>} */
+  
   var delays = {
     readQuestion:  { mean: 8000, std: 3000, min: 3000, max: 15000 },
     clickOption:  { mean: 1200, std: 400,  min: 400,  max: 3000  },
@@ -48,13 +35,9 @@ function humanDelay(type) {
   return new Promise(function(resolve) { setTimeout(resolve, ms); });
 }
 
-// ─── 贝塞尔曲线鼠标点击 ───
-/**
- * 模拟人类鼠标移动轨迹并点击目标元素
- * 使用二次贝塞尔曲线 + 随机抖动
- * @param {HTMLElement} element - 要点击的元素
- * @returns {Promise<void>}
- */
+
+
+
 function humanClick(element) {
   return new Promise(function(resolve) {
     if (!element || !element.getBoundingClientRect) { resolve(); return; }
@@ -85,12 +68,9 @@ function humanClick(element) {
   });
 }
 
-// ─── 模拟浏览行为 ───
-/**
- * 在指定时长内模拟用户浏览行为（随机滚动、跳转内容区）
- * @param {number} durationMs - 模拟时长（毫秒）
- * @returns {Promise<void>}
- */
+
+
+
 function simulateBrowsing(durationMs) {
   return new Promise(function(resolve) {
     var endTime = Date.now() + durationMs;
@@ -107,12 +87,9 @@ function simulateBrowsing(durationMs) {
   });
 }
 
-// ─── 答题频率限制 ───
-/**
- * 检查当前是否超出每日/每小时答题上限。
- * 每日上限 80 题，每小时上限 20 题。
- * @returns {boolean} true=允许答题, false=已达上限
- */
+
+
+
 function checkRateLimit() {
   var today = new Date().toISOString().slice(0, 10);
   var hour = new Date().getHours();
@@ -127,22 +104,22 @@ function checkRateLimit() {
   return true;
 }
 
-// ─── 自适应轮询间隔 ───
-/** @type {number} 当前轮询间隔（毫秒） */
+
+
 var scanInterval_ = 500;
 
-/**
- * 重置并启动一次视频扫描（带随机初始延迟）
- */
+
+
+
 function retryScan() {
   retryCount = 0;
   scanInterval_ = 500 + Math.floor(Math.random() * 300);
   setTimeout(scanLoop, scanInterval_ + Math.floor(Math.random() * 200));
 }
 
-/**
- * 循环扫描视频，间隔逐次递增（500ms → 2000ms + 30% 抖动）
- */
+
+
+
 function scanLoop() {
 
   if (findAndPlayVideo()) { retryCount = 0; scanInterval_ = 500; return; }
@@ -153,6 +130,6 @@ function scanLoop() {
   }
 }
 
-// 全局初始触发（所有 frame 都会执行）
+
 setTimeout(scanLoop, rand(1000, 3000));
 

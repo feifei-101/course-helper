@@ -31,7 +31,7 @@
     tm.textContent = new Date().toLocaleTimeString("zh-CN", { hour:"2-digit", minute:"2-digit" });
   }
 
-  // Speed
+  
   chrome.storage.local.get("_hpSpeed", function(d) {
     var spd = d._hpSpeed || 1;
     var btns = sgrp.querySelectorAll(".speed-btn");
@@ -47,14 +47,14 @@
     getTab(function(tab) { if (tab && tab.id) chrome.tabs.sendMessage(tab.id, { action: "set-speed", speed: spd }).catch(function(){}); });
   });
 
-  // Toggle
+  
   chrome.storage.sync.get("autoPlayEnabled", function(d) { tog.checked = d.autoPlayEnabled !== false; });
   tog.addEventListener("change", function() {
     chrome.storage.sync.set({ autoPlayEnabled: tog.checked });
     getTab(function(tab) { if (tab && tab.id) chrome.tabs.sendMessage(tab.id, { action: "toggle-auto", enabled: tog.checked }).catch(function(){}); });
   });
 
-  // Stats
+  
   function refreshStats() {
     getTab(function(tab) {
       if (!tab || !tab.id) return;
@@ -67,7 +67,7 @@
     });
   }
 
-  // API Key
+  
   var drawerOpen = false;
   apiRow.addEventListener("click", function(e) {
     if (e.target.tagName === "INPUT" || e.target.tagName === "BUTTON") return;

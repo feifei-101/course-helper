@@ -1,20 +1,14 @@
 console.log('>>>狒狒助手模块版V2.0<<< 如果你看到这行,新代码正在运行');
-/**
- * @file 主入口模块
- * 浏览器指纹保护、键盘快捷键、状态管理、任务完成检测、通知、切节逻辑、
- * 消息路由、自动连播协调。
- * 依赖：所有其他 content/ 模块
- */
 
-// ─── 浏览器指纹保护 ───
+
 try { Object.defineProperty(navigator, 'webdriver', { get: function() { return false; }, configurable: false }); } catch(e) {}
 try { Object.defineProperty(navigator, 'languages', { get: function() { return ['zh-CN', 'zh', 'en']; }, configurable: false }); } catch(e) {}
-// 人类鼠标噪声监听
+
 document.addEventListener('mousemove', function() {
   window._lastHumanMove = Date.now();
 }, { passive: true });
 
-// ─── 键盘快捷键 ───
+
 document.addEventListener('keydown', function(e) {
   if (e.altKey && e.shiftKey) {
     if (e.key === 'A' || e.key === 'a') {
@@ -34,15 +28,7 @@ document.addEventListener('keydown', function(e) {
   }
 });
 
-// ─── 基础工具函数 ───
 
-
-// ─── 通知 ───
-/**
- * 在页面顶部显示悬浮通知
- * @param {string} text - 通知文本
- * @param {string} [type] - 类型: success/error/undefined
- */
 function showNotification(text, type) {
   var existing = document.getElementById('_hpNotify');
   if (existing) existing.remove();
@@ -54,13 +40,11 @@ function showNotification(text, type) {
   setTimeout(function() { n.style.opacity = '0'; setTimeout(function() { n.remove(); }, 500); }, 4000);
 }
 
-// ══════════════════════════════════════════════════════════
-// 顶层页面逻辑（仅在顶层 frame 执行）
-// ══════════════════════════════════════════════════════════
+
 if (window.top === window.self) {
   console.log('[助手] content script (\u9876\u5C42) \u5DF2\u52A0\u8F7D');
 
-  // ─── 全屏检测 ───
+  
   var wasFullscreen = false;
   document.addEventListener('fullscreenchange', function() {
     wasFullscreen = !!document.fullscreenElement;
@@ -73,7 +57,7 @@ if (window.top === window.self) {
   var pendingNext = false;
   var pendingNextTimer = null;
 
-  // ─── 设置读取 ───
+  
   chrome.storage.sync.get('autoPlayEnabled', function(d) {
     autoPlayEnabled = d.autoPlayEnabled !== false;
     if (autoPlayEnabled) setTimeout(retryScan, 2000);
@@ -83,7 +67,7 @@ if (window.top === window.self) {
     if (c.autoPlayEnabled) { autoPlayEnabled = c.autoPlayEnabled.newValue; if (autoPlayEnabled) retryScan(); }
   });
 
-  // ─── 消息监听 ───
+  
   chrome.runtime.onMessage.addListener(function(msg, s, sendResponse) {
     if (msg.action === 'toggle-auto') { autoPlayEnabled = msg.enabled; if (autoPlayEnabled) retryScan(); sendResponse({ enabled: autoPlayEnabled }); }
     if (msg.action === 'ping') { sendResponse({ alive: true, autoPlayEnabled: autoPlayEnabled }); }
@@ -99,16 +83,16 @@ if (window.top === window.self) {
       });
     }
     if (msg.action === 'show-ai-search') {
-      // 打开 AI 搜题结果页
+      
       var resultUrl = chrome.runtime.getURL('result.html') + '?text=' + encodeURIComponent(msg.text);
       chrome.tabs.create({ url: resultUrl });
     }
   });
 
-  // ─── 任务完成检测 ───
-  /**
-   * @returns {boolean} 当前任务是否已完成
-   */
+  
+  
+
+
   function isTaskCompleted() {
     for (const el of document.querySelectorAll(CHAOXING_SELECTORS.taskCompletedTextTags)) {
       var t = (el.textContent || '').trim();
@@ -120,8 +104,8 @@ if (window.top === window.self) {
     return false;
   }
 
-  // ─── 切节调度 ───
-  // ─── 跳转断路器 ───
+  
+  
 
   function scheduleNextCheck() {
     if (!autoPlayEnabled || !pendingNext) return;
@@ -154,8 +138,8 @@ if (window.top === window.self) {
   setInterval(scheduleNextCheck, 1000);
 
 
-  // ─── 视频结束轮询 ───
-  // ─── 视频结束轮询 ───
+  
+  
   function pollVideoEnded() {
     chrome.storage.local.get("_helperVideoEnded", function(data) {
       if (data._helperVideoEnded && Date.now() - data._helperVideoEnded < 3000) {
@@ -196,23 +180,23 @@ if (window.top === window.self) {
   }
   setInterval(pollQuizDone, 1500);
 
-  // [已弃用，改在 pollVideoEnded 内处理]
-  //   setTimeout(function() {
-  //     var v = document.querySelector(CHAOXING_SELECTORS.videoEl);
-  //     var nb = document.querySelector(CHAOXING_SELECTORS.nextButtons);
-  //     console.log('[DEBUG] autoAdv: autoPlay=' + autoPlayEnabled + ' pending=' + pendingNext + ' video=' + (v ? 'found' : 'none') + ' nextBtn=' + (nb ? 'visible:' + nb.offsetParent : 'null'));
-  //     if (nb && nb.offsetParent !== null && !v) {
-  //       setState('advancing', '未检测到视频，尝试跳转');
-  //       pendingNext = true;
-  //       scheduleNextCheck();
-  //     }
-  //   }, 3000);
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
 
-  // ─── 点击下一节 ───
+  
   function clickNext() {
     if (!autoPlayEnabled) { setState('idle', '\u8FDE\u64AD\u5DF2\u5173\u95ED'); return; }
 
-    // 遍历选择器列表
+    
     var selList = CHAOXING_SELECTORS.nextButtons.split(', ');
     for (var si = 0; si < selList.length; si++) {
       var el = document.querySelector(selList[si]);
@@ -224,7 +208,7 @@ if (window.top === window.self) {
         return; 
       }
     }
-    // 文本匹配
+    
     for (const el of document.querySelectorAll('a, button, span, i, div[onclick], [role=button]')) {
       var t = (el.textContent || '').trim();
       if (t.includes('\u4E0B\u4E00') && el.offsetParent !== null) { 
@@ -249,7 +233,7 @@ if (window.top === window.self) {
     setState('idle', '\u5168\u90E8\u5B8C\u6210');
   }
 
-  // ─── DOM 变化监听：自动触发视频扫描 ───
+  
   new MutationObserver(function() {
     if (autoPlayEnabled) {
       var v = document.querySelector(CHAOXING_SELECTORS.videoEl);
@@ -260,22 +244,15 @@ if (window.top === window.self) {
   }).observe(document.body || document.documentElement, { childList: true, subtree: true });
 }
 
-// ══════════════════════════════════════════════════════════
-// 答题 iframe：自动答题入口
-// ══════════════════════════════════════════════════════════
+
 if (window.top !== window.self && (location.href).indexOf(CHAOXING_SELECTORS.quizFrame) >= 0) {
   setState('answering_quiz', '\u81EA\u52A8\u7B54\u9898\u4E2D');
   setTimeout(autoAnswerQuiz, 2000);
 }
 
-// ══════════════════════════════════════════════════════════
-// 保持 service worker 活跃
-// ══════════════════════════════════════════════════════════
+
 setInterval(function() {
   try { chrome.runtime.sendMessage({ action: 'keepalive' }); } catch(e) {}
 }, 20000);
-
-
-
 
 

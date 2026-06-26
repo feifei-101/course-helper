@@ -1,16 +1,6 @@
-﻿/**
- * @file 自动答题模块
- * 包含题目提取、AI 问答、答案填入、分批答题、提交。
- * 依赖：CHAOXING_SELECTORS（selectors.js）、humanClick（anti-detection.js）、
- *       checkRateLimit（anti-detection.js）、setState（state.js）、addLog（stats.js）
- */
+﻿
 
-/**
- * 带指数退避重试的消息发送
- * @param {Object} msg - 消息对象
- * @param {number} retries - 重试次数
- * @returns {Promise<Object>}
- */
+
 function sendMessageRetry(msg, retries) {
   return new Promise(function(resolve, reject) {
     function trySend(n) {
@@ -29,7 +19,7 @@ function sendMessageRetry(msg, retries) {
   });
 }
 
-/** @returns {boolean} 是否已提交 */
+
 function isQuizSubmitted() {
   for (const el of document.querySelectorAll(CHAOXING_SELECTORS.taskCompletedTextTags)) {
     var t = (el.textContent || '').trim();
@@ -41,17 +31,14 @@ function isQuizSubmitted() {
   return false;
 }
 
-/**
- * 自动答题主入口（带分批逻辑）
- * 超过 5 道题时自动分组，批间休息 2~5 分钟 + 模拟浏览
- */
+
 function autoAnswerQuiz() {
   if (isQuizSubmitted()) { console.log('[助手] \u5DF2\u63D0\u4EA4, \u901A\u77E5\u8DF3\u8F6C'); setState('advancing', '\u5DF2\u63D0\u4EA4, \u8DF3\u8F6C\u4E2D'); try { chrome.storage.local.set({ _helperQuizDone: Date.now() }); } catch(e) {} return; }
   if (!checkRateLimit()) return;
   var questionItems = document.querySelectorAll(CHAOXING_SELECTORS.questionItem);
   if (!questionItems || questionItems.length === 0) return;
 
-  /** @type {Array} */
+  
   var questions = [];
   questionItems.forEach(function(item, idx) {
     var titleEl = item.querySelector(CHAOXING_SELECTORS.questionTitle);
@@ -93,7 +80,7 @@ function autoAnswerQuiz() {
   for (var bi = 0; bi < total; bi += BATCH_SIZE) { batches.push(questions.slice(bi, bi + BATCH_SIZE)); }
   addLog('\u9898\u76EE\u5171 ' + total + ' \u9053, \u5206 ' + batches.length + ' \u6279\u7B54\u9898');
 
-  /** 递归处理每一批 */
+  
   function processBatch(batchIdx) {
     if (batchIdx >= batches.length) { setState('answering_quiz', '\u5168\u90E8\u6279\u6B21\u7B54\u9898\u5B8C\u6210'); return; }
     var batch = batches[batchIdx];
