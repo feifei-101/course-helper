@@ -1,50 +1,60 @@
 ﻿{
-  "manifest_version": 3,
-  "name": "\u72D2\u72D2\u52A9\u624B",
-  "version": "1.0",
-  "description": "\u81EA\u52A8\u8FDE\u64AD + AI\u641C\u9898",
-  "permissions": [
-    "contextMenus",
-    "storage",
-    "activeTab",
-    "scripting"
-  ],
-  "host_permissions": [
-    "*://*.chaoxing.com/*",
-    "https://api.deepseek.com/*"
-  ],
-  "background": {
-    "service_worker": "background.js"
-  },
-  "content_scripts": [
-    {
-      "matches": [ "*://*.chaoxing.com/*" ],
-      "js": [
-        "content/selectors.js",
-        "content/stats.js",
-        "content/state.js",
-        "content/anti-detection.js",
-        "content/video-handler.js",
-        "content/quiz-answerer.js",
-        "content/panel.js",
-        "content/main.js"
-      ],
-      "run_at": "document_end",
-      "all_frames": true
-    }
-  ],
-  "web_accessible_resources": [{
-    "resources": [ "result.html", "result.js", "content/panel.css" ],
-    "matches": [ "<all_urls>" ]
-  }],
-  "content_security_policy": {
-    "extension_pages": "default-src 'self'; connect-src https://api.deepseek.com; style-src 'self' 'unsafe-inline'; img-src 'self'"
-  },
-  "action": {
-    "default_title": "\u72D2\u72D2\u52A9\u624B",
-    "default_popup": "popup.html"
-  },
-  "icons": { "128": "icon.png" }
+    "manifest_version":  3,
+    "name":  "狒狒助手",
+    "version":  "1.0",
+    "description":  "自动连播 + AI搜题",
+    "permissions":  [
+                        "contextMenus",
+                        "storage",
+                        "activeTab",
+                        "scripting"
+                    ],
+    "host_permissions":  [
+                             "*://*.chaoxing.com/*",
+                             "https://api.deepseek.com/*"
+                         ],
+    "background":  {
+                       "service_worker":  "background.js"
+                   },
+    "content_scripts":  [
+                            {
+                                "matches":  [
+                                                "*://*.chaoxing.com/*"
+                                            ],
+                                "js":  [
+                                           "selectors.js",
+                                           "stats.js",
+                                           "state.js",
+                                           "anti-detection.js",
+                                           "video-handler.js",
+                                           "quiz-answerer.js",
+                                           "panel.js",
+                                           "main.js"
+                                       ],
+                                "run_at":  "document_end",
+                                "all_frames":  true
+                            }
+                        ],
+    "web_accessible_resources":  [
+                                     {
+                                         "resources":  [
+                                                           "result.html",
+                                                           "result.js",
+                                                           "panel.css"
+                                                       ],
+                                         "matches":  [
+                                                         "\u003call_urls\u003e"
+                                                     ]
+                                     }
+                                 ],
+    "content_security_policy":  {
+                                    "extension_pages":  "default-src \u0027self\u0027; connect-src https://api.deepseek.com; style-src \u0027self\u0027 \u0027unsafe-inline\u0027; img-src \u0027self\u0027"
+                                },
+    "action":  {
+                   "default_title":  "狒狒助手",
+                   "default_popup":  "popup.html"
+               },
+    "icons":  {
+                  "128":  "icon.png"
+              }
 }
-
-

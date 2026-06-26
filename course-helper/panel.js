@@ -6,7 +6,7 @@
   // ─── 注入 CSS ───
   var link = document.createElement("link");
   link.rel = "stylesheet";
-  link.href = chrome.runtime.getURL("content/panel.css");
+  link.href = chrome.runtime.getURL("panel.css");
   document.head.appendChild(link);
 
   var POS_KEY = "_helperPanelPos", MIN_KEY = "_helperPanelMin";
