@@ -1,24 +1,11 @@
 ﻿console.log('>>>ANTI-DETECTION-MODULE<<<');
 
-
-
-
-
-
-
 function randn(mean, std) {
   var u = 0, v = 0;
   while (u === 0) u = Math.random();
   while (v === 0) v = Math.random();
   return mean + std * Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
 }
-
-
-
-
-
-
-
 
 function humanDelay(type) {
   
@@ -34,9 +21,6 @@ function humanDelay(type) {
   var ms = Math.max(cfg.min, Math.min(cfg.max, randn(cfg.mean, cfg.std)));
   return new Promise(function(resolve) { setTimeout(resolve, ms); });
 }
-
-
-
 
 function humanClick(element) {
   return new Promise(function(resolve) {
@@ -68,9 +52,6 @@ function humanClick(element) {
   });
 }
 
-
-
-
 function simulateBrowsing(durationMs) {
   return new Promise(function(resolve) {
     var endTime = Date.now() + durationMs;
@@ -87,9 +68,6 @@ function simulateBrowsing(durationMs) {
   });
 }
 
-
-
-
 function checkRateLimit() {
   var today = new Date().toISOString().slice(0, 10);
   var hour = new Date().getHours();
@@ -103,22 +81,13 @@ function checkRateLimit() {
   localStorage.setItem(hourlyKey, String(hourly + 1));
   return true;
 }
-
-
-
 var scanInterval_ = 500;
-
-
-
 
 function retryScan() {
   retryCount = 0;
   scanInterval_ = 500 + Math.floor(Math.random() * 300);
   setTimeout(scanLoop, scanInterval_ + Math.floor(Math.random() * 200));
 }
-
-
-
 
 function scanLoop() {
 
@@ -132,4 +101,3 @@ function scanLoop() {
 
 
 setTimeout(scanLoop, rand(1000, 3000));
-
