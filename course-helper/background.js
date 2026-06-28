@@ -1,6 +1,4 @@
-﻿
-
-function encryptKey(key) {
+﻿function encryptKey(key) {
   var k = "fFHelper2024"; var r = "";
   for (var i = 0; i < key.length; i++) r += String.fromCharCode(key.charCodeAt(i) ^ k.charCodeAt(i % k.length));
   return btoa(unescape(encodeURIComponent(r)));
