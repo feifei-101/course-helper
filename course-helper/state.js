@@ -1,10 +1,6 @@
-﻿
-
-
 var currentState = 'idle';
 
 var stateMessage = '\u5C31\u7EEA';
-
 
 function rand(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
