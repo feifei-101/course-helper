@@ -1,26 +1,11 @@
-
-
-
-
-
-
 var retryCount = 0;
-
 var lastNotified = 0;
-
-
-
-
 var _hpVideoFound = false;
 function findAndPlayVideo() {
   var v = document.querySelector(CHAOXING_SELECTORS.videoEl);
   if (v && v.readyState >= 1) { tryPlay(v); return true; }
   return false;
 }
-
-
-
-
 function tryPlay(v) {
   if (!v) return;
   if (!v.paused && !v.ended) { setState('video_playing', '\u64AD\u653E\u89C6\u9891\u4E2D'); bindVideoEnd(v); return; }
@@ -39,10 +24,6 @@ function tryPlay(v) {
     bindVideoEnd(v);
   });
 }
-
-
-
-
 function bindVideoEnd(v) {
   if (v.dataset.helperBound === 'true') return;
   v.dataset.helperBound = 'true';
@@ -55,16 +36,12 @@ function bindVideoEnd(v) {
     }
   }, 2000);
 }
-
-
 function notifyVideoEnded() {
   var now = Date.now();
   if (now - lastNotified < 5000) return;
   lastNotified = now;
   chrome.storage.local.set({ _helperVideoEnded: now });
 }
-
-
 function checkRewindSignal() {
   chrome.storage.local.get(['_helperRewind'], function(data) {
     if (data._helperRewind && Date.now() - data._helperRewind < 4000) {
@@ -82,8 +59,4 @@ function checkRewindSignal() {
     }
   });
 }
-
-
 setInterval(checkRewindSignal, 2000);
-
-
