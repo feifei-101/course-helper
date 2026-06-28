@@ -1,6 +1,3 @@
-﻿
-
-
 var CHAOXING_SELECTORS = {
   
   videoEl: '#video_html5_api, video, .video-js video, .prism-player video',
@@ -36,6 +33,3 @@ var CHAOXING_SELECTORS = {
   
   courseFrameIframe: 'iframe[src*=video], iframe[src*=course]',
 };
-
-
-
