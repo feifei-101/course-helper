@@ -1,7 +1,4 @@
-﻿
-
-
-#_helperPanel {
+﻿#_helperPanel {
   position: fixed;
   z-index: 2147483647;
   width: 300px !important;
