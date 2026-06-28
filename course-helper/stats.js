@@ -1,9 +1,3 @@
-﻿
-
-
-
-
-
 function getDailyStats() {
   var today = new Date().toISOString().slice(0, 10);
   try {
@@ -16,7 +10,6 @@ function getDailyStats() {
 function saveDailyStats(stats) {
   localStorage.setItem('_hpStats_' + new Date().toISOString().slice(0, 10), JSON.stringify(stats));
 }
-
 
 var MAX_LOG_ENTRIES = 200;
 var MAX_LOG_BYTES = 50 * 1024;
