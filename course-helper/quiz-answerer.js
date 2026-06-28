@@ -1,7 +1,4 @@
-﻿
-
-
-function sendMessageRetry(msg, retries) {
+﻿function sendMessageRetry(msg, retries) {
   return new Promise(function(resolve, reject) {
     function trySend(n) {
       chrome.runtime.sendMessage(msg, function(response) {
@@ -117,7 +114,6 @@ function autoAnswerQuiz() {
       .catch(function(err) { setState('error', 'AI \u8BF7\u6C42\u5931\u8D25: ' + err.message); });
   }
 
-  // 少量题目用单次流程，大量题目用分批
   if (batches.length === 1) {
     var promptAll = questions.map(function(q) {
       var line = '\u9898\u76EE' + q.index + ': ' + q.title;
@@ -144,13 +140,6 @@ function autoAnswerQuiz() {
       .catch(function(err) { setState('error', 'AI \u8BF7\u6C42\u5931\u8D25: ' + err.message); });
   } else { processBatch(0); }
 }
-
-/**
- * 逐题填入 AI 返回的答案（带逐题延迟和模拟点击）
- * @param {Array} questions - 题目列表
- * @param {string} answerText - AI 返回的答案文本
- * @param {Function} onComplete - 填写完毕回调
- */
 function fillAnswers(questions, answerText, onComplete) {
   var rawLines = answerText.split('\n').map(function(l) { return l.trim(); }).filter(function(l) { return l; });
   var itemList = document.querySelectorAll(CHAOXING_SELECTORS.questionItem);
@@ -173,7 +162,7 @@ function fillAnswers(questions, answerText, onComplete) {
 
     var lookDelay = 400 + Math.floor(Math.random() * 800);
     setTimeout(function() {
-      // 判断题
+
       if (answer === '\u5BF9' || answer === '\u6B63\u786E' || answer === 'T') {
         var radio = item.querySelector('input[type=radio][value=1], input[type=radio][value=true]');
         if (radio) { humanClick(radio).then(function() { radio.checked = true; triggerEvent(radio, 'change'); setTimeout(fillNext, 200 + Math.floor(Math.random() * 300)); }); return; }
@@ -231,18 +220,12 @@ function fillAnswers(questions, answerText, onComplete) {
   fillNext();
 }
 
-/**
- * 触发 DOM 事件
- * @param {HTMLElement} el - 目标元素
- * @param {string} type - 事件类型
- */
+
 function triggerEvent(el, type) {
   el.dispatchEvent(new Event(type, { bubbles: true }));
 }
 
-/**
- * 提交答案（带拟人延迟和贝塞尔点击）
- */
+
 function submitQuiz() {
   var checkDelay = 3000 + Math.floor(Math.random() * 5000);
   setState('answering_quiz', '\u68C0\u67E5\u7B54\u6848\u4E2D ' + Math.round(checkDelay/1000) + 's');
